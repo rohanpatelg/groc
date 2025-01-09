@@ -35,6 +35,11 @@
           </div>
         </div>
       </div>
+      <div class="flex mt-8  justify-start items-center gap-4 mb-4">
+        <!-- Amount of given given by the customer -->
+        <div>Given Amount</div>
+        <input v-model="givenAmount" type="number" step="0.01" class="border p-2 w-24 ml-8" placeholder="0.00" @input="calculateTotal" />
+      </div>
       <!-- Total -->
       <div class="flex justify-between items-center mt-6 pt-4 border-t">
         <div class="font-bold">Total</div>
@@ -58,7 +63,7 @@ onMounted(() => {
     weights.value = new Array(groceryList.value.length).fill('')
   }
 })
-
+const givenAmount = ref(0)
 // Calculate value for individual item
 const calculateItemValue = (index) => {
   const itemPrice = groceryList.value[index].price
@@ -73,7 +78,9 @@ const calculateTotal = () => {
     const itemWeight = parseFloat(weight) || 0
     return sum + (itemPrice * itemWeight)
   }, 0)
-
+ if(weights.value.length > 0 && givenAmount.value > totalPrice.value && givenAmount.value > 0){
+  totalPrice.value = givenAmount.value - totalPrice.value
+ }
   // Format to 2 decimal places
   totalPrice.value = totalPrice.value.toFixed(2)
 }
